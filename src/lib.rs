@@ -14,6 +14,10 @@ pub struct Workload {
     pub description: String,
     pub metadata: String,
 
+    pub next_action: NextAction,
+    pub result: Vec<Result>,
+
+    #[serde(flatten)]
     pub data: WorkloadData
 }
 
@@ -115,6 +119,36 @@ pub struct GatewayDelegateInformation {
 #[derive(Serialize, Deserialize)]
 pub struct Gateway4To6Information {
     pub public_key: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum NextAction {
+    Create,
+	Sign,
+	Pay,
+	Deploy,
+	Delete,
+	Invalid,
+	Deleted,
+	Migrated,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Result {
+    workload_id: String,
+    data_json: Vec<u8>,
+    signature: String,
+    state: ResultState,
+    message: String,
+    epoch: i64,
+    node_id: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum ResultState {
+    Ok,
+    Err,
+    Deleted
 }
 
 #[derive(Serialize, Deserialize)]
